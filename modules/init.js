@@ -27,6 +27,32 @@ const mimeTypes = {
 const requestHandler = function(request,response){
 	var uri = url.parse(request.url).pathname;
 	var filename = path.join(process.cwd(),'www/',uri);
+	/***************************BEGIN: AJAX Hanlder**************************************/
+	var slash = request.url.split('/');
+	if(slash[1] == 'ajax' || (request.headers['x-requested-with'] == 'XMLHttpRequest')){
+		response.writeHead(200, {'Content-Type': mimeTypes['json']} );
+		switch(slash[2]){
+			case 'bob':
+				console.log('in bob');
+				response.write(JSON.stringify({ a: 1 }, null, 3));
+				break;
+			case 'marley':
+				console.log('in maarley');
+				response.write(JSON.stringify({ 'kiko':'mimo','lilo':'nano' }));
+				break;
+			case 'clapton':
+				console.log('in clapton');
+				response.write(JSON.stringify(fs));
+				break;
+			default:
+				console.log('in clapton');
+				response.write(JSON.stringify({ 'kiko':'wallah','lilo':'illah' }));
+				break;
+		}
+		response.end();
+		return;
+	} 
+	/***************************END  : AJAX Hanlder**************************************/
 	/***If request is for favicon, skip***/
 	if (uri === '/favicon.ico') {
 		console.log('request for favico');
